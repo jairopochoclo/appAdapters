@@ -13,6 +13,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.appadaper.activities.ReservaApiActivity;
 import com.example.appadaper.adapters.MenuAdapter;
 import com.example.appadaper.models.MenuItem;
 
@@ -74,6 +75,9 @@ public class MainActivity extends AppCompatActivity {
         switch (position) {
             case 0: // Ejemplo Simple
                 intent = new Intent(this, AdaptersActivity.class);
+                break;
+            case 1: // Ejemplo Api
+                intent = new Intent(this, ReservaApiActivity.class);
                 break;
             default:
                 Toast.makeText(this, "Opción no implementada aún", Toast.LENGTH_SHORT).show();

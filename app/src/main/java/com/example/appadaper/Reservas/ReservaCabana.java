@@ -5,8 +5,8 @@ public class ReservaCabana extends Reserva{
     private Boolean incluyeChimenea;
     private int capacidadMaxima;
 
-    public ReservaCabana(int codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal, boolean isReserve, String cardColor, String urlImagen,int metrosCuadrados, Boolean incluyeChimenea, int capacidadMaxima) {
-        super(codigo, cliente, fechaEntrada, fechaSalida, precioTotal, isReserve, cardColor, urlImagen);
+    public ReservaCabana(String codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal, boolean isReserve, String cardColor, String urlImagen,int price,int metrosCuadrados, Boolean incluyeChimenea, int capacidadMaxima) {
+        super(codigo, cliente, fechaEntrada, fechaSalida, precioTotal, isReserve, cardColor, urlImagen, price);
         this.metrosCuadrados = metrosCuadrados;
         this.incluyeChimenea = incluyeChimenea;
         this.capacidadMaxima = capacidadMaxima;

@@ -1,9 +1,12 @@
 package com.example.appadaper.activities;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import java.io.Serializable;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.bumptech.glide.Glide;
 import com.example.appadaper.R;
 import com.example.appadaper.Reservas.Reserva;
 import com.example.appadaper.Reservas.ReservaCabana;
@@ -17,6 +20,7 @@ public class InfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_info);
         TextView txtInfo = findViewById(R.id.txtInfo);
+        ImageView bgImage = findViewById(R.id.bgImage);
 
         // Verifica si es ReservaHotel
         if (getIntent().hasExtra("reserva_hotel")) {
@@ -30,7 +34,7 @@ public class InfoActivity extends AppCompatActivity {
         }
         else if (getIntent().hasExtra("reserva_glamping")) {
             ReservaGlamping glamping = (ReservaGlamping) getIntent().getSerializableExtra("reserva_glamping");
-            mostrarInfoGlamping(glamping, txtInfo);
+            mostrarInfoGlamping(glamping, txtInfo,bgImage );
         }
     }
 
@@ -41,6 +45,7 @@ public class InfoActivity extends AppCompatActivity {
                 "📅 Fechas:\n" +
                 "       - Entrada: " + hotel.getFechaEntrada() + "\n" +
                 "       - Salida: " + hotel.getFechaSalida() + "\n\n" +
+                "💰 Precio estandar: $" + hotel.getPrice() + "\n\n" +
                 "💰 Precio total: $" + hotel.getPrecioTotal() + "\n\n" +
                 "🛌 Habitación: " + hotel.getTipoHabitacion() + "\n\n" +
                 "👥 Huéspedes: " + hotel.getNumeroHuespedes() + "\n\n" +
@@ -57,6 +62,7 @@ public class InfoActivity extends AppCompatActivity {
                 "📅 Fechas:\n" +
                 "       - Entrada: " + cabana.getFechaEntrada() + "\n" +
                 "       - Salida: " + cabana.getFechaSalida() + "\n\n" +
+                "💰 Precio estandar: $" + cabana.getPrice() + "\n\n" +
                 "💰 Precio total: $" + cabana.getPrecioTotal() + "\n\n" +
                 "📏 Metros cuadrados: " + cabana.getMetrosCuadrados() + " m²\n\n" +
                 "👥 Capacidad máxima: " + cabana.getCapacidadMaxima() + " personas\n\n" +
@@ -65,14 +71,14 @@ public class InfoActivity extends AppCompatActivity {
 
         txtInfo.setText(info);
     }
-
-    private void mostrarInfoGlamping(ReservaGlamping glamping, TextView txtInfo) {
+    private void mostrarInfoGlamping(ReservaGlamping glamping, TextView txtInfo, ImageView bgImage) {
         String info = "TIPO: GLAMPING\n\n" +
                 "📋 Código: " + glamping.getCodigo() + "\n\n" +
                 "👤 Cliente: " + glamping.getCliente() + "\n\n" +
                 "📅 Fechas:\n" +
                 "       - Entrada: " + glamping.getFechaEntrada() + "\n" +
                 "       - Salida: " + glamping.getFechaSalida() + "\n\n" +
+                "💰 Precio estandar: $" + glamping.getPrice() + "\n\n" +
                 "💰 Precio total: $" + glamping.getPrecioTotal() + "\n\n" +
                 "📏 Espacio: " + glamping.getMetrosCuadrados() + " m²\n\n" +
                 "👥 Capacidad: " + glamping.getCapacidadMaxima() + " personas\n\n" +
@@ -82,5 +88,10 @@ public class InfoActivity extends AppCompatActivity {
                 "📌 Estado: " + (glamping.isReserve() ? "Reservado" : "Disponible");
 
         txtInfo.setText(info);
+
+        Glide.with(txtInfo.getContext())
+                .load(glamping.getImg())
+                .centerCrop()
+                .into(bgImage);
     }
 }

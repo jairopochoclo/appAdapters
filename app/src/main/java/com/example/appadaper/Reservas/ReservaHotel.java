@@ -5,8 +5,8 @@ public class ReservaHotel extends Reserva{
     private Boolean incluyeDesayuno;
     private int numeroHuespedes;
 
-    public ReservaHotel(int codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal,boolean isReserve,String cardColor, String urlImagen, String tipoHabitacion, Boolean incluyeDesayuno, int numeroHuespedes) {
-        super(codigo, cliente, fechaEntrada, fechaSalida, precioTotal, isReserve, cardColor, urlImagen);
+    public ReservaHotel(String codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal,boolean isReserve,String cardColor, String urlImagen,int price ,String tipoHabitacion, Boolean incluyeDesayuno, int numeroHuespedes) {
+        super(codigo, cliente, fechaEntrada, fechaSalida, precioTotal, isReserve, cardColor, urlImagen, price);
         this.tipoHabitacion = tipoHabitacion;
         this.incluyeDesayuno = incluyeDesayuno;
         this.numeroHuespedes = numeroHuespedes;

@@ -3,7 +3,7 @@ package com.example.appadaper.Reservas;
 import java.io.Serializable;
 
 public class Reserva implements Serializable {
-    private int codigo;
+    private String codigo;
     private String cliente;
     private String fechaEntrada;
     private String fechaSalida;
@@ -11,8 +11,9 @@ public class Reserva implements Serializable {
     private boolean isReserve;
     private String cardColor;
     private String urlImagen;
+    private int price;
 
-    public Reserva(int codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal, boolean isReserve, String cardColor, String urlImagen) {
+    public Reserva(String codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal, boolean isReserve, String cardColor, String urlImagen, int price) {
         this.codigo = codigo;
         this.cliente = cliente;
         this.fechaEntrada = fechaEntrada;
@@ -21,11 +22,12 @@ public class Reserva implements Serializable {
         this.isReserve = isReserve;
         this.cardColor = cardColor;
         this.urlImagen = urlImagen;
+        this.price = price;
     }
 
-    public int getCodigo() {return codigo;}
+    public String getCodigo() {return codigo;}
 
-    public void setCodigo(int codigo) {this.codigo = codigo;}
+    public void setCodigo(String codigo) {this.codigo = codigo;}
 
     public String getCliente() {return cliente;}
 
@@ -51,5 +53,8 @@ public class Reserva implements Serializable {
     public String getUrlImagen() {return urlImagen;}
 
     public void setUrlImagen(String urlImagen) {this.urlImagen = urlImagen;}
+    public int getPrice() {return price;}
+
+    public void setPrice(int price) {this.price = price;}
 
 }
