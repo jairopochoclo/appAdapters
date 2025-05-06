@@ -1,0 +1,393 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".activities.ItemCrudActivity">
+
+    <!-- ScrollView para todo el contenido -->
+    <ScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:text="Sistema de Reservas"
+                android:textAlignment="center"
+                android:textColor="#3F51B5"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cardForm"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <TextView
+                        android:id="@+id/tvFormTitle"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        android:text="Nueva Reserva"
+                        android:textStyle="bold" />
+
+                    <!-- Selector de tipo de reserva -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilTipoReserva"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="Tipo de Alojamiento"
+                        app:endIconMode="dropdown_menu">
+
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                            android:id="@+id/actvTipoReserva"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="false"
+                            android:inputType="none" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Campos comunes -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilCodigo"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="Código de Reserva">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCodigo"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="text" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilCliente"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="Nombre del Cliente">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etCliente"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="textPersonName" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <!-- Fechas -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal"
+                        android:weightSum="2">
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/tilFechaEntrada"
+                            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="4dp"
+                            android:layout_weight="1"
+                            android:hint="Fecha Entrada">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etFechaEntrada"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:clickable="true"
+                                android:inputType="text" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilFechaSalida"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="4dp"
+                                android:layout_weight="1"
+                                android:hint="Fecha Salida">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:id="@+id/etFechaSalida"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:clickable="true"
+                                android:inputType="text" />
+                        </com.google.android.material.textfield.TextInputLayout>
+                    </LinearLayout>
+
+                    <!-- Campos específicos -->
+                    <FrameLayout
+                        android:id="@+id/flCamposEspecificos"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp">
+
+                        <!-- Hotel -->
+                        <LinearLayout
+                            android:id="@+id/llHotelFields"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilTipoHabitacion"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Tipo de Habitación"
+                                app:endIconMode="dropdown_menu">
+
+                                <com.google.android.material.textfield.MaterialAutoCompleteTextView
+                                    android:id="@+id/actvTipoHabitacion"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:clickable="true"
+                                    android:focusable="false"
+                                    android:inputType="none" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <CheckBox
+                                android:id="@+id/cbIncluyeDesayuno"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Incluye Desayuno" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilNumeroHuespedes"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Número de Huéspedes">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etNumeroHuespedes"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <!-- Cabaña -->
+                        <LinearLayout
+                            android:id="@+id/llCabanaFields"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilMetrosCuadrados"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Metros Cuadrados">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etMetrosCuadrados"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <CheckBox
+                                android:id="@+id/cbIncluyeChimenea"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Incluye Chimenea" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilCapacidadMaxima"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Capacidad Máxima">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etCapacidadMaxima"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+
+                        <!-- Glamping -->
+                        <LinearLayout
+                            android:id="@+id/llGlampingFields"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:visibility="gone">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilMetrosCuadradosGlamping"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Metros Cuadrados">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etMetrosCuadradosGlamping"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <CheckBox
+                                android:id="@+id/cbIncluyeChimeneaGlamping"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:text="Incluye Chimenea" />
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilCapacidadMaximaGlamping"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Capacidad Máxima">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etCapacidadMaximaGlamping"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="number" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilTipoExperiencia"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Tipo de Experiencia">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etTipoExperiencia"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="text" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/tilActividadesIncluidas"
+                                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:hint="Actividades Incluidas">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/etActividadesIncluidas"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:inputType="textMultiLine"
+                                    android:minLines="2" />
+                            </com.google.android.material.textfield.TextInputLayout>
+                        </LinearLayout>
+                    </FrameLayout>
+
+                    <!-- Precio y confirmación -->
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/tilPrecioTotal"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:hint="Precio Total">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/etPrecioTotal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:inputType="numberDecimal" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <CheckBox
+                        android:id="@+id/cbConfirmarReserva"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:text="Confirmar Reserva" />
+
+                    <!-- Botones -->
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <Button
+                            android:id="@+id/btnLimpiar"
+                            style="@style/Widget.MaterialComponents.Button.TextButton"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginEnd="8dp"
+                            android:text="Limpiar" />
+
+                        <Button
+                            android:id="@+id/btnGuardar"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="Guardar" />
+                    </LinearLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- Lista de reservas (fuera del ScrollView) -->
+
+    <!-- Botón flotante -->
+
+</androidx.constraintlayout.widget.ConstraintLayout>

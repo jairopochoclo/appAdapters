@@ -1,16 +1,19 @@
 package com.example.appadaper.Reservas;
 
+import java.util.List;
+
 public class ReservaHotel extends Reserva{
     private String tipoHabitacion;
     private Boolean incluyeDesayuno;
     private int numeroHuespedes;
 
-    public ReservaHotel(String codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal,boolean isReserve,String cardColor, String urlImagen,int price ,String tipoHabitacion, Boolean incluyeDesayuno, int numeroHuespedes) {
-        super(codigo, cliente, fechaEntrada, fechaSalida, precioTotal, isReserve, cardColor, urlImagen, price);
+    public ReservaHotel(String codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal, boolean isReserve, String cardColor, String urlImagen, int price, String tipoHabitacion, Boolean incluyeDesayuno, int numeroHuespedes, int esperanzaVida, List<String> datos) {
+        super(codigo, cliente, fechaEntrada, fechaSalida, precioTotal, isReserve, cardColor, urlImagen, price, esperanzaVida, datos);
         this.tipoHabitacion = tipoHabitacion;
         this.incluyeDesayuno = incluyeDesayuno;
         this.numeroHuespedes = numeroHuespedes;
     }
+
 
     public String getTipoHabitacion() {return tipoHabitacion;}
 

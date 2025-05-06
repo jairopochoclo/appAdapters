@@ -28,7 +28,6 @@ public class GlampingActivity extends AppCompatActivity implements itemAdapter.O
     private itemAdapter adapter;
     private List<Reserva> items;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_glamping);
@@ -47,7 +46,7 @@ public class GlampingActivity extends AppCompatActivity implements itemAdapter.O
     private void initItems() {
         items = new ArrayList<>();
         // Colores en gama de verdes naturales (#Código - Descripción)
-        items.add(new ReservaGlamping("101", "María González", "2024-06-15", "2024-06-20", 1200, false, "#2E7D32",
+        /*items.add(new ReservaGlamping("101", "María González", "2024-06-15", "2024-06-20", 1200, false, "#2E7D32",
                 "https://media.admagazine.com/photos/6239341e83e0740e83d095a3/16:9/w_5488,h_3087,c_limit/glamping.jpg", 20000, 50, true, 4, "Lujo en la naturaleza", "Senderismo, Observación de estrellas",
                 "https://media.admagazine.com/photos/6239341e83e0740e83d095a3/16:9/w_5488,h_3087,c_limit/glamping.jpg"));
 
@@ -66,12 +65,12 @@ public class GlampingActivity extends AppCompatActivity implements itemAdapter.O
         items.add(new ReservaGlamping("505", "Laura Jiménez", "2024-10-20", "2024-10-25", 2100, false, "#33691E",
                 "https://theindianface.com/cdn/shop/articles/Sin-titulo-1_11661747-7518-44c0-b923-111d1cdc5f78.jpg?v=1652867285", 1500, 80, true, 5, "Premium", "Tour gastronómico, Spa natural, Clases de fotografía",
                 "https://theindianface.com/cdn/shop/articles/Sin-titulo-1_11661747-7518-44c0-b923-111d1cdc5f78.jpg?v=1652867285"));
+    */
     }
 
     public void onItemClick(Reserva item, int position) {
         Toast.makeText(this, "Seleccionaste: " + item.getCodigo(), Toast.LENGTH_SHORT).show();
     }
-
 
     public void onActionButtonClick(Reserva item, int position) {
         // Cambiamos el estado del item y notificamos al adaptador
@@ -86,5 +85,9 @@ public class GlampingActivity extends AppCompatActivity implements itemAdapter.O
         Intent intent = new Intent(this, InfoActivity.class);
         intent.putExtra("reserva_glamping", (Serializable) item);
         startActivity(intent);
+    }
+    public void onDeleteButtonClick(Reserva item, int position) {
+        adapter.removeItem(item.getCodigo()); // Necesitas implementar removeItem(String codigo)
+        Toast.makeText(this, "Reserva #" + item.getCodigo() + " eliminada", Toast.LENGTH_SHORT).show();
     }
 }

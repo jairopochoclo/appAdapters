@@ -1,6 +1,7 @@
 package com.example.appadaper.Reservas;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Reserva implements Serializable {
     private String codigo;
@@ -12,8 +13,12 @@ public class Reserva implements Serializable {
     private String cardColor;
     private String urlImagen;
     private int price;
+    private int esperanzaVida;
+    private List<String> datos;
 
-    public Reserva(String codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal, boolean isReserve, String cardColor, String urlImagen, int price) {
+    public Reserva(String codigo, String cliente, String fechaEntrada, String fechaSalida, int precioTotal,
+                   boolean isReserve, String cardColor, String urlImagen, int price,
+                   int esperanzaVida, List<String> datos) {
         this.codigo = codigo;
         this.cliente = cliente;
         this.fechaEntrada = fechaEntrada;
@@ -23,7 +28,15 @@ public class Reserva implements Serializable {
         this.cardColor = cardColor;
         this.urlImagen = urlImagen;
         this.price = price;
+        this.esperanzaVida = esperanzaVida;
+        this.datos = datos;
     }
+
+    public int getEsperanzaVida() { return esperanzaVida; }
+    public void setEsperanzaVida(int esperanzaVida) { this.esperanzaVida = esperanzaVida; }
+
+    public List<String> getDatos() { return datos; }
+    public void setDatos(List<String> datos) { this.datos = datos; }
 
     public String getCodigo() {return codigo;}
 

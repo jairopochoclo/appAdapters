@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.appadaper.Reservas.Reserva;
 import com.example.appadaper.R;
+import com.example.appadaper.ReservasDataManager;
 
 import java.util.List;
 
@@ -32,6 +33,7 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         void onItemClick(Reserva item, int position);
         void onActionButtonClick(Reserva item, int position);
         void onInfoButtonClick(Reserva item);
+        void onDeleteButtonClick(Reserva item, int position);
 
     }
 
@@ -60,7 +62,6 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         }
     }
 
-    @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Reserva item = items.get(position);
 
@@ -82,7 +83,6 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 .centerCrop()
                 .into(holder.ivImage);
 
-        // Luego en bindActiveViewHolder:
         LinearLayout cardView = holder.itemView.findViewById(R.id.cardViewContainer);
         int color = Color.parseColor(item.getCardColor());
         cardView.setBackgroundColor(color);
@@ -102,11 +102,16 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 listener.onInfoButtonClick(item);
             }
         });
+        holder.btnEliminar.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onDeleteButtonClick(item, position);
+            }
+        });
     }
 
     private void bindInactiveViewHolder(InactiveViewHolder holder, Reserva item, int position) {
         holder.tvTitle.setText("#"+String.valueOf(item.getCodigo()));
-        holder.tvDescription.setText("PRECIO: "+String.valueOf(item.getPrecioTotal())+"$");
+        holder.tvDescription.setText("ESPERANZA DE VIDA: "+String.valueOf(item.getEsperanzaVida()));
         Glide.with(holder.itemView.getContext())
                 .load(item.getUrlImagen())
                 .centerCrop()
@@ -128,19 +133,46 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
                 listener.onInfoButtonClick(item);
             }
         });
+        holder.btnEliminar.setOnClickListener(v -> {
+            if (listener != null) {
+                listener.onDeleteButtonClick(item, position);
+            }
+        });
+    }
+    public void removeItem(String codigo) {
+        for (int i = 0; i < items.size(); i++) {
+            if (items.get(i).getCodigo().equals(codigo)) {
+                items.remove(i);
+                notifyItemRemoved(i);
+                break;
+            }
+        }
     }
 
-    @Override
     public int getItemCount() {
         return items.size();
     }
 
+    public void setItems(List<Reserva> newItems) {
+        this.items = newItems;
+    }
+    public void addItem(Reserva nuevaReserva) {
+        // Añadimos la nueva reserva al singleton
+        ReservasDataManager.getInstance().getReservas().add(nuevaReserva);
+
+        // Actualizamos la lista del adaptador desde el singleton
+        this.items = ReservasDataManager.getInstance().getReservas();  // Usamos 'items', que es la lista interna
+
+        // Notificamos al RecyclerView que se insertó un nuevo item
+        notifyItemInserted(items.size() - 1);  // Indicar que el nuevo ítem fue agregado
+    }
     public static class ActiveViewHolder extends RecyclerView.ViewHolder {
         TextView tvTitle;
         TextView tvDescription;
         ImageView ivImage;
         ImageButton btnAction;
         ImageButton btnInfo;
+        ImageButton btnEliminar;
 
         public ActiveViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -149,6 +181,7 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ivImage = itemView.findViewById(R.id.ivImage);
             btnAction = itemView.findViewById(R.id.btnAction);
             btnInfo = itemView.findViewById(R.id.btnInfo);
+            btnEliminar = itemView.findViewById(R.id.btnEliminar);
         }
     }
 
@@ -158,6 +191,7 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         ImageView ivImage;
         ImageButton btnAction;
         ImageButton btnInfo;
+        ImageButton btnEliminar;
 
         public InactiveViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -166,6 +200,7 @@ public class itemAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             ivImage = itemView.findViewById(R.id.ivImage);
             btnAction = itemView.findViewById(R.id.btnAction);
             btnInfo = itemView.findViewById(R.id.btnInfo);
+            btnEliminar = itemView.findViewById(R.id.btnEliminar);
         }
     }
 }

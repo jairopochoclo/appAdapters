@@ -2,150 +2,131 @@ package com.example.appadaper.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.android.volley.Request;
-import com.android.volley.toolbox.JsonArrayRequest;
-import com.android.volley.toolbox.Volley;
 import com.example.appadaper.R;
+import com.example.appadaper.ReservasDataManager;
 import com.example.appadaper.Reservas.*;
 import com.example.appadaper.adapters.itemAdapter;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ReservaApiActivity extends AppCompatActivity implements itemAdapter.OnItemActionListener {
     private RecyclerView recyclerView;
     private itemAdapter adapter;
-    private List<Reserva> items = new ArrayList<>();
-    private static final String URL = "https://raw.githubusercontent.com/adancondori/TareaAPI/refs/heads/main/api/reservas.json";
+    private FloatingActionButton fabAdd;
+
+    private static final int REQUEST_NUEVA_RESERVA = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_hotel);
+        setContentView(R.layout.activity_reserva_api);
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
-        cargarReservasDesdeApi();
-    }
-
-    private void cargarReservasDesdeApi() {
-        com.android.volley.toolbox.JsonObjectRequest request = new com.android.volley.toolbox.JsonObjectRequest(
-                Request.Method.GET, URL, null,
-                response -> {
-                    items = parsearReservas(response); // Ahora sí es JSONObject
-                    adapter = new itemAdapter(items, this);
-                    recyclerView.setAdapter(adapter);
-                },
-                error -> Toast.makeText(this, "Error al cargar: " + error.getMessage(), Toast.LENGTH_SHORT).show()
-        );
-
-        Volley.newRequestQueue(this).add(request);
-    }
-
-    private List<Reserva> parsearReservas(JSONObject response) {
-        List<Reserva> lista = new ArrayList<>();
-        try {
-            JSONArray jsonArray = response.getJSONArray("reservas");
-            for (int i = 0; i < jsonArray.length(); i++) {
-                JSONObject obj = jsonArray.getJSONObject(i);
-                String tipo = obj.getString("tipo");
-                String codigo = obj.getString("codigo");
-                String cliente = obj.getString("cliente");
-                String fechaEntrada = obj.getString("fechaEntrada");
-                String fechaSalida = obj.getString("fechaSalida");
-                int precioTotal = obj.getInt("precioTotal");
-
-                // Valores por defecto
-                boolean reservado = false;
-                String color = "#FFFFFF";
-                String urlImagen = "";
-                int price = 0;
-
-                switch (tipo) {
-                    case "ReservaHotel":
-                        ReservaHotel hotel = new ReservaHotel(
-                                codigo, cliente, fechaEntrada, fechaSalida, precioTotal, reservado,
-                                color, urlImagen, price,
-                                obj.getString("tipoHabitacion"),
-                                obj.getBoolean("incluyeDesayuno"),
-                                obj.getInt("numeroHuespedes")
-                        );
-                        lista.add(hotel);
-                        break;
-
-                    case "ReservaCabana":
-                        ReservaCabana cabana = new ReservaCabana(
-                                codigo, cliente, fechaEntrada, fechaSalida, precioTotal, reservado,
-                                color, urlImagen, price,
-                                obj.getInt("metrosCuadrados"),
-                                obj.getBoolean("tieneChimenea"),
-                                obj.getInt("capacidadMaxima")
-                        );
-                        lista.add(cabana);
-                        break;
-
-                    case "ReservaGlamping":
-                        JSONArray actividadesArray = obj.getJSONArray("actividadesIncluidas");
-                        StringBuilder actividades = new StringBuilder();
-                        for (int j = 0; j < actividadesArray.length(); j++) {
-                            actividades.append(actividadesArray.getString(j));
-                            if (j < actividadesArray.length() - 1) actividades.append(", ");
-                        }
-
-                        ReservaGlamping glamping = new ReservaGlamping(
-                                codigo, cliente, fechaEntrada, fechaSalida, precioTotal, reservado,
-                                color, urlImagen, price,
-                                obj.getInt("metrosCuadrados"),
-                                obj.getBoolean("tieneChimenea"),
-                                obj.getInt("capacidadMaxima"),
-                                obj.getString("tipoExperiencia"),
-                                actividades.toString(),
-                                ""
-                        );
-                        lista.add(glamping);
-                        break;
-                }
+        fabAdd = findViewById(R.id.fabAdd);
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                abrirFormularioReserva();
             }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        return lista;
+        });
+
+        cargarReservas();
+    }
+    private void abrirFormularioReserva() {
+        Intent intent = new Intent(this, ItemCrudActivity.class);
+        startActivityForResult(intent, REQUEST_NUEVA_RESERVA);
     }
 
+    private void cargarReservas() {
+        ReservasDataManager.getInstance().cargarDatosDesdeApi(this, new ReservasDataManager.OnDataLoadedListener() {
+            @Override
+            public void onDataLoaded(List<Reserva> reservas) {
+                // Crear el adaptador con la lista más reciente de reservas del singleton
+                adapter = new itemAdapter(ReservasDataManager.getInstance().getReservas(), ReservaApiActivity.this);
+                recyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onError(String errorMessage) {
+                Toast.makeText(ReservaApiActivity.this, "Error: " + errorMessage, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == REQUEST_NUEVA_RESERVA && resultCode == RESULT_OK && data != null) {
+            if (data.hasExtra("nueva_reserva")) {
+                Reserva nuevaReserva = (Reserva) data.getSerializableExtra("nueva_reserva");
+                if (nuevaReserva != null) {
+                    // Añadirla al adapter
+                    adapter.addItem(nuevaReserva);
+                    // Notificar al adaptador que los datos pueden haber cambiado
+                    adapter.notifyDataSetChanged();
+                }
+            } else if (data.hasExtra("reserva_actualizada")) {
+                // Si es una actualización, recargar toda la lista
+                adapter.setItems(ReservasDataManager.getInstance().getReservas());
+                adapter.notifyDataSetChanged();
+            }
+        } else {
+            // Siempre recargar la lista al volver a esta actividad,
+            // para reflejar cualquier cambio hecho en otras pantallas
+            adapter.setItems(ReservasDataManager.getInstance().getReservas());
+            adapter.notifyDataSetChanged();
+        }
+    }
     public void onItemClick(Reserva item, int position) {
         Toast.makeText(this, "Seleccionaste: " + item.getCodigo(), Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void onActionButtonClick(Reserva item, int position) {
         item.setReserve(!item.isReserve());
         adapter.notifyItemChanged(position);
     }
 
-    @Override
     public void onInfoButtonClick(Reserva item) {
         Intent intent = new Intent(this, InfoActivity.class);
 
         if (item instanceof ReservaHotel) {
             intent.putExtra("reserva_hotel", (Serializable) item);
-        } else if (item instanceof ReservaCabana) {
-            intent.putExtra("reserva_cabana", (Serializable) item);
         } else if (item instanceof ReservaGlamping) {
             intent.putExtra("reserva_glamping", (Serializable) item);
+        } else if (item instanceof ReservaCabana) {
+            intent.putExtra("reserva_cabana", (Serializable) item);
         }
         startActivity(intent);
+    }
+    public void onDeleteButtonClick(Reserva item, int position) {
+        // Crea un AlertDialog de confirmación
+        new AlertDialog.Builder(this)
+                .setTitle("Confirmar eliminación")
+                .setMessage("¿Estás seguro de que quieres eliminar la reserva #" + item.getCodigo() + "?")
+                .setPositiveButton("Eliminar", (dialog, which) -> {
+                    // Si el usuario confirma, elimina el ítem
+                    adapter.removeItem(item.getCodigo());
+                    Toast.makeText(this, "Reserva #" + item.getCodigo() + " eliminada", Toast.LENGTH_SHORT).show();
+                })
+                .setNegativeButton("Cancelar", (dialog, which) -> {
+                    // Si cancela, no hagas nada (cierra el diálogo automáticamente)
+                    Toast.makeText(this, "Cancelado", Toast.LENGTH_SHORT).show();
+                })
+                .setIcon(android.R.drawable.ic_dialog_alert) // Icono de advertencia
+                .show();
     }
 }
